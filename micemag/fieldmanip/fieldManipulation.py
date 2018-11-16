@@ -47,3 +47,12 @@ def scaleField(field, lengthScale, fieldScale):
         
     return scaledField
 
+def shiftField(field, dz):
+    """Shifts the z-coordinate of the field by dz"""
+    for f in field:
+        if f.ID == 'Polar Data':
+            f.set_RPhiZ(f.r, f.phi, f.z + dz)
+        elif f.ID == 'Cartesian Data':
+            f.set_XYZ(f.x, f.y, f.z + dz)
+
+    return field #Don't need this really because it changes the actual values

@@ -34,9 +34,13 @@ class Measurement:
             self.phi = np.float64(360.0 + phi)
         else:
             self.phi = np.float64(phi)
-            
+        self.r = np.float64(r)
+        self.z = np.float64(z)
+
+        self.Br = np.float64(Br)
+        self.Bphi = np.float64(Bphi)
+        self.Bz = np.float64(Bz)
         
-        self.Br, self.Bz = np.float64(Br) np.float64(Bz)
         self.B = np.sqrt(self.Br**2 + self.Bphi**2 + self.Bz**2)
         self.ID = "Polar Data"
 
@@ -102,12 +106,13 @@ class Measurement:
     def set_RPhiZ(self, r, phi, z):
          """Set the r,phi,z coordinates of this instance.
         
-        Args:
+         Args:
             r   (float): The desired r coordinate
             phi (float): The desired phi coordinate
             z   (float): The desired z coordinate
 
-        """
-        self.r = r
-        self.phi = phi
-        self.z = z
+         """
+         self.r = r
+         self.phi = phi
+         self.z = z
+         

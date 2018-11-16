@@ -34,7 +34,7 @@ class Measurement:
         self.ID = "Cartesian Data"
 
         if sensorNumber is None:
-            sensorNumber = -1
+            self.sensorNumber = -1
         else:
             self.sensorNumber = sensorNumber
 

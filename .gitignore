@@ -1,0 +1,10 @@
+*.egg-info
+*.pdf
+*.png
+*.pyc
+*.pyo
+build/
+dist/
+*~
+\#*\#
+.\#*
