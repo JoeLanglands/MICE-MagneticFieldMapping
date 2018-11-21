@@ -22,7 +22,7 @@ def getDefaultFitDict(coil, magnet):
         print 'You need to provide the name of the pickle that you wish to use'
         sys.exit()
 
-def applyFB_field(field, _fitDict, coil, magnet, FBonly=False, nCores=1): #Not OOP because I want the speed from multiprocessing...
+def applyFB_field(field, _fitDict, coil, magnet, FBonly=False, nCores=1):
     global fitDict
     fitDict = _fitDict
     global jZeros
@@ -63,9 +63,9 @@ def applyFB_grid(magDict, x, y, z, Bx, By, Bz):
         if Z < (-1.0)*fitDict['zmax'] or Z > fitDict['zmax']:
             continue
         BrFB, BphiFB, BzFB = calcBrBphiBz(_r, _phi, Z)
-        _Br += BrFB
-        _Bphi += BphiFB
-        _Bz += BzFB
+        _Br += BrFB*current_scale
+        _Bphi += BphiFB*current_scale
+        _Bz += BzFB*current_scale
         
     X, Y, Z, _Bx, _By, _Bz = polarToCart(_r, _phi, _z, _Br, _Bphi, _Bz)
     return _Bx, _By, _Bz

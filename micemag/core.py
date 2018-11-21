@@ -11,7 +11,6 @@ from fbutils import fbfit as fitFB
 from fieldmanip.readData import readFile
 from plotting import plots3d as p3d
 
-#Simple functional interfaces to the fourier bessel fitting routines
 
 def performFBfit(residField, coil, magnet, zmax=None, rmax=0.15, n=3, l=20, m=10,\
                  verbose=True, saveAs=None):
@@ -39,6 +38,9 @@ def showFBfield(_residField, coil, magnet, fitDict=None, nCores=1):
     
     if fitDict == None:
         _fitDict = appFB.getDefaultFitDict(coil, magnet)
+    else:
+        with (os.path.join(utils.fb_pickle_path, fitDict), 'rb') as _pickle:
+            _fitDict = pickle.load(_pickle)
         
     fb_field = appFB.applyFB_field(residField, _fitDict, coil, magnet, FBonly=True, nCores=nCores)
 
@@ -46,6 +48,33 @@ def showFBfield(_residField, coil, magnet, fitDict=None, nCores=1):
     
 
 def buildG4BLfield(magDict, gridDict, saveAs=None, FBonly=True):
+    """Builds a magnetic field of SSU/SSD and prints it out to a .table file in g4blgrid format.
+
+    Args:
+        magDict  (dict): Dictionary containing magnet, coil currents and custom fitDict paths.
+                         If fitDict paths are not specified it pulls the default ones.
+        gridDict (dict): Dictionary containing information about the grid in which to calculate
+                         the field over. 
+        saveAs   (str):  Name that the user wishes to call the outputted field (no need to supply
+                         full path). If None (default value), the magnet name + todays date is used.
+        FBonly (bool):   When True: calculate only FB terms.  When False: calculate geofit+FB terms,
+                         i.e the full model field is output.
+
+    Returns:
+        Doesn't return anything.  The outputted field is saved at data/MAUS/saveAs.table.
+
+    Todo:
+        *Needs the geofit part added so that a full field (geo+FB) can be output
+        *When geofit support is added, make FBonly parameter switch behaviour of function
+        *The scaleList part could change? May need support so that it can be adjusted by the user    
+    
+    """
+    print 'Calculating field map for magnet:', magDict['magnet']
+    print 'With currents:'
+    print '\n\t M1  -> %.2f A\n\t M2  -> %.2f A\n\t ECE -> %.2f A\n'%(magDict['M1']['I'], \
+                                                                      magDict['M2']['I'], \
+                                                                      magDict['CC']['I'])
+    print 'This could take a while...'
     if saveAs == None:
         _date = time.localtime()
         saveAs = '%s_%s%s%s.table'%(magDict['magnet'], _date.tm_year, _date.tm_mon, _date.tm_mday)
@@ -63,6 +92,7 @@ def buildG4BLfield(magDict, gridDict, saveAs=None, FBonly=True):
                  ' 4 BX [1e-3]\n', ' 5 BY [1e-3]\n', ' 6 BZ [1e-3]\n', ' 0\n']
     print 'Writing out %d field points'%(xNsteps*yNsteps*zNsteps)
     count = 1
+    start_time = time.time()
     with open(os.path.join(utils.maus_field_path, saveAs), 'w') as _output:
         _output.write('\t%d\t%d\t%d\t1\n'%(xNsteps, yNsteps, zNsteps))
         for i in scaleList:
@@ -75,10 +105,10 @@ def buildG4BLfield(magDict, gridDict, saveAs=None, FBonly=True):
                         Bx, By, Bz = appFB.applyFB_grid(magDict, _x, _y, _z, 0, 0, 0)
                     elif FBonly == False:
                         #placeholder -- this needs the geofit interpolation added
-                        Bx, By, Bz = appFB.applyFB_grid(magDict, x, y, z, 0, 0, 0) 
+                        Bx, By, Bz = appFB.applyFB_grid(magDict, _x, _y, _z, 0, 0, 0) 
                     _output.write('{:.3f}\t{:.3f}\t{:.3f}\t{:.8f}\t{:.8f}\t{:.8f}\n'.format( \
                                     _x, _y,_z, Bx, By, Bz))
-                    utils.progressBar(count, xNsteps*yNsteps*zNsteps)
+                    utils.progressBar(count, xNsteps*yNsteps*zNsteps, start_time, time.time())
                     count += 1
     print 'Finished! File can be found at %s'%os.path.join(utils.maus_field_path, saveAs)
                         

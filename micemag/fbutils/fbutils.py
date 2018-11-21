@@ -342,7 +342,3 @@ class MultipoleFitFcn:
     def setData(self, data):
         self.DoF = len(data) - self.func_code.co_argcount #Degrees of freedom
         self.data = data
-
-
-if __name__=='__main__':
-    centreField(0, 0 ,0)
