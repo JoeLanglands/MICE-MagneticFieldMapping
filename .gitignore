@@ -8,3 +8,7 @@ dist/
 *~
 \#*\#
 .\#*
+*.table
+CODE_UNDER_TEST/
+.so
+.o

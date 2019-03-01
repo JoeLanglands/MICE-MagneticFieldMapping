@@ -11,16 +11,25 @@ import fbutils as _fb
 from micemag.fieldmanip import polarMeasurement as rphiz
 import micemag.utils as utils
 
+
+#Consolidate all of this into a class to remove need for global values etc..
+
 def getDefaultFitDict(coil, magnet):
-    picklePath = os.path.join(utils.fb_pickle_path, '%s_%s_3_20_6.pickle'%(magnet, coil))
+    if coil.upper() == 'CC':
+        coil = 'ECE'
+        
+    picklePath = os.path.join(utils.fb_pickle_path, '%s_%s_3_20_10.pickle'%(magnet, coil))
     try:
         with open(picklePath, 'rb') as _pickle:
             fitDict = pickle.load(_pickle)
         return fitDict
     except IOError:
+        print 'Attempted to load pickle:', picklePath
         print 'Default FB term pickle not found! Has it been deleted?'
         print 'You need to provide the name of the pickle that you wish to use'
         sys.exit()
+
+
 
 def applyFB_field(field, _fitDict, coil, magnet, FBonly=False, nCores=1):
     global fitDict

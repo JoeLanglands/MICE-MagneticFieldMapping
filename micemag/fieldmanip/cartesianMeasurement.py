@@ -1,6 +1,8 @@
 import numpy as np
 
 class Measurement:
+    __slots__ = ['x', 'y', 'z', 'Bx', 'By', 'Bz', 'B', 'sensorNumber', 'Date', 'Time', 'ID']
+    
     def __init__(self, x, y, z, Bx, By, Bz, sensorNumber=None, date=None, time=None):
         """Class that stores cartesian field data.
 
@@ -27,19 +29,26 @@ class Measurement:
                 date. The format is HHMMSS.        
 
         """
-        
-        self.x, self.y, self.z = x, y, z
-        self.Bx, self.By, self.Bz = np.float64(Bx), np.float64(By), np.float64(Bz)
+
+        self.x = np.float64(x)
+        self.y = np.float64(y)
+        self.z = np.float64(z)
+
+        self.Bx = np.float64(Bx)
+        self.By = np.float64(By)
+        self.Bz = np.float64(Bz)
+
         self.B = np.sqrt(self.Bx**2 + self.By**2 + self.Bz**2)
-        self.ID = "Cartesian Data"
 
         if sensorNumber is None:
             self.sensorNumber = -1
         else:
             self.sensorNumber = sensorNumber
 
+        self.ID = "Cartesian Data"
+
         if date is None:
-            self.Date = 22052013
+            self.Date = 00000000
         else:
             self.Date = date
 
@@ -62,39 +71,9 @@ class Measurement:
         return '%5.10f\t%5.10f\t%5.10f\t%5.10f\t%5.10f\t%5.10f\t%5.10f\t%d\t%d\t%s\n' % (self.z, self.x, self.y, self.Bx, self.By, self.Bz, self.B, self.sensorNumber, self.Date, self.Time)
 
     def identifier(self):
-        """Returns the identifier for this class.
-
-        This class will return the string -- Cartesian Data.  This function is used to distinguish
-        between Cartesian Measurements and polar Measurements.
-
-        """
-        return '%s' % (self.ID)
-
-    def setData(self, date):
-        """Sets the date of this instance."""
-        self.Date = date
-
-    def setTime(self, time):
-        """Sets the time of this instance."""
-        self.Time = time
-
-    def date(self):
-        """Returns the date of this instance."""
-        return '%d' % (self.Date)
-
-    def time(self):
-        """Returns the time of this instance."""
-        return '%s' % (self.Time)
+        return self.ID
 
     def set_XYZ(self, x, y, z):
-        """Set the x,y,z coordinates of this instance.
-        
-        Args:
-            x (float): The desired x coordinate
-            y (float): The desired y coordinate
-            z (float): The desired z coordinate
-
-        """
         self.x = x
         self.y = y
         self.z = z

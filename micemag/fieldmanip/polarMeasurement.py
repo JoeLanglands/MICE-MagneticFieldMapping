@@ -1,6 +1,8 @@
 import numpy as np
 
-class Measurement:
+class Measurement(object):
+    __slots__ = ['r', 'phi', 'z', 'Br', 'Bphi', 'Bz', 'B', 'sensorNumber', 'Date', 'Time', 'ID']
+
     def __init__(self, r, phi, z, Br, Bphi, Bz, sensorNumber=None, date=None, time=None):
         """Class that stores cylindrical polar field data.
 
@@ -30,44 +32,45 @@ class Measurement:
                 date. The format is HHMMSS.
 
         """
+        
+        self.r = np.float64(r)
+        self.z = np.float64(z)
         if phi < 0.0:
             self.phi = np.float64(360.0 + phi)
         else:
             self.phi = np.float64(phi)
-        self.r = np.float64(r)
-        self.z = np.float64(z)
 
         self.Br = np.float64(Br)
         self.Bphi = np.float64(Bphi)
         self.Bz = np.float64(Bz)
-        
+
         self.B = np.sqrt(self.Br**2 + self.Bphi**2 + self.Bz**2)
-        self.ID = "Polar Data"
 
         if sensorNumber is None:
             self.sensorNumber = -1
         else:
             self.sensorNumber = sensorNumber
 
-        if date is None:
-            self.Date = 22052013
+        self.ID = "Polar Data"
+
+        if date == None:
+            self.Date = 00000000
         else:
             self.Date = date
-
-        if time is None:
+            
+        if time == None:
             self.Time = 120000
         else:
             self.Time = time
-
-
+        
+        
     def __lt__(self, other):
         return (np.around(self.z, 3), np.around(self.r, 2), np.around(self.phi, 0)) < (np.around(other.z, 3), np.around(other.r, 2), np.around(other.phi, 0))
         
-    
+        
     def __add__(self, other):
         return Measurement(self.r, self.phi, self.z, self.Br + other.Br, self.Bphi + other.Bphi, self.Bz + other.Bz)
 
-    
     def __str__(self):
         return '(z = %5.10f, r = %5.10f, phi = %5.10f, Br = %5.10f, Bphi = %5.10f, Bz = %5.10f, |B| = %5.10f, sensor = %d)' % (self.z, self.r, self.phi, self.Br, self.Bphi, self.Bz, self.B, self.sensorNumber)
 
@@ -79,40 +82,9 @@ class Measurement:
         return '%5.10f\t%5.10f\t%5.10f\t%5.10f\t%5.10f\t%5.10f\t%5.10f\t%d\t%d\t%s\n' % (self.z, self.r, self.phi, self.Br, self.Bphi, self.Bz, self.B, self.sensorNumber, self.Date, self.Time)
 
     def identifier(self):
-        """Returns the identifier for this class.
-
-        This class will return the string -- Polar Data.  This function is used to distinguish
-        between Cartesian Measurements and polar Measurements.
-
-        """
-        return '%s' % (self.ID)
-
-    def setData(self, date):
-        """Sets the date of this instance."""
-        self.Date = date
-
-    def setTime(self, time):
-        """Sets the time of this instance."""
-        self.Time = time
-
-    def date(self):
-        """Returns the date of this instance."""
-        return '%d' % (self.Date)
-
-    def time(self):
-        """Returns the time of this instance."""
-        return '%s' % (self.Time)
+        return self.ID
 
     def set_RPhiZ(self, r, phi, z):
-         """Set the r,phi,z coordinates of this instance.
-        
-         Args:
-            r   (float): The desired r coordinate
-            phi (float): The desired phi coordinate
-            z   (float): The desired z coordinate
-
-         """
-         self.r = r
-         self.phi = phi
-         self.z = z
-         
+        self.r = r
+        self.phi = phi
+        self.z = z

@@ -8,7 +8,6 @@ import cartesianMeasurement as xyz
 import polarMeasurement as rphiz
 
 
-
 def readFile(fileName):
     """
     Reads a tab-separated data file such as those created by readDataFromMapper.py or calculateField.py

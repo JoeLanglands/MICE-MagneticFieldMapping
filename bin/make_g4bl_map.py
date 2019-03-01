@@ -31,13 +31,13 @@ parser.add_argument('-M2', '--Match2', help='Desired current of M2 in Amperes. D
                     type=float, default=0.0)
 parser.add_argument('-CC', '--Centre', help='Desired current of E1-CC-E2 in Amperes. Defaults to 0', \
                     type=float, default=0.0)
-parser.add_argument('-FB', '--FBonly', help='Use this flag if you only want the FB contributions\n' + \
-                    'NOTE THIS DOES NOT AFFECT THE PROGRAM AT ALL RIGHT NOW', action='store_true')
+parser.add_argument('-FB', '--FBonly', help='Use this flag if you only want the FB contributions\n', \
+                    action='store_true')
 parser.add_argument('-t', '--time', help='Show execution time of program', action='store_true')
 
 def buildDicts(args):
     if args.magnet not in ['ssu', 'SSU', 'ssd', 'SSD']:
-        print 'Unrecognised magnet paramter. Please only use: ssu, SSU, ssd, SSD.'
+        print 'Unrecognised magnet parameter. Please only use: ssu, SSU, ssd, SSD.'
         sys.exit()
     if args.Match1 == 0.0 and args.Match2 == 0.0 and args.Centre == 0.0:
         print 'You have not specified any currents!'
@@ -52,13 +52,14 @@ def buildDicts(args):
     
 if __name__=='__main__':
     args = parser.parse_args()
+
     if args.time:
         @utils.timeit
         def make_g4bl_map_timed(args):
-            core.buildG4BLfield(buildDicts(args), utils.default_grid)
+            core.buildG4BLfield(buildDicts(args), utils.default_grid, FBonly=args.FBonly)
             return
         make_g4bl_map_timed(args)
     else:
-        core.buildG4BLfield(buildDicts(args), utils.default_grid)
+        core.buildG4BLfield(buildDicts(args), utils.default_grid, FBonly=args.FBonly)
     
     

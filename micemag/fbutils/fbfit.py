@@ -73,7 +73,7 @@ class FBfitClass:
         if self.verbose == True:
             _min = minuit.Minuit(self.FourFitClass)
         else:
-            _min = minuit.Minuit(self.FourFitClass, pedantic=False, print_level=0)
+            _min = minuit.Minuit(self.FourFitClass, pedantic=False)
         _min.migrad()
 
         self.fitDict = _fb.mergeDicts(self.fitDict, _min.values)
@@ -97,7 +97,7 @@ class FBfitClass:
         if self.verbose == True:
             _min = minuit.Minuit(self.HypFitClass)
         else:
-            _min = minuit.Minuit(self.HypFitClass, pedantic=False, print_level=0)
+            _min = minuit.Minuit(self.HypFitClass, pedantic=False)
         _min.migrad()
 
         self.fitDict = _fb.mergeDicts(self.fitDict, _min.values)
@@ -134,7 +134,7 @@ class FBfitClass:
         if self.verbose == True:
             _min = minuit.Minuit(self.MultFitClass)
         else:
-            _min = minuit.Minuit(self.MultFitClass, pedantic=False, print_level=0)
+            _min = minuit.Minuit(self.MultFitClass, pedantic=False)
         _min.migrad()
 
         self.fitDict = _fb.mergeDicts(self.fitDict, _min.values)

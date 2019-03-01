@@ -1,3 +1,4 @@
 import cartesianMeasurement
 import polarMeasurement
-import fieldManipulation
+from fieldManipulation import * #Want functions from these easily available
+from readData import * #^as above

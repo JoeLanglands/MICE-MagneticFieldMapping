@@ -4,9 +4,12 @@ import scipy as sp
 import numpy as np
 import scipy.special as spec
 
-import micemag.utils as utils
+import micemag.utils as utils #I know this is bad (see note below)
 from micemag.fieldmanip.fieldManipulation import shiftField
 
+
+#I know the import noted above is probably bad and the centre should probably be passed to the fit
+#class but it's this way now and I might get round to changing it
 
 def centreField(field, coil, magnet, undo=False):
     """Function that smartly shifts the data so that z=0 is where the coil centre is."""
@@ -21,6 +24,8 @@ def centreField(field, coil, magnet, undo=False):
         shift = utils.ssu_centre_dict[data_set][coil]
     elif magnet in ['ssd', 'SSD', 'downstream']:
         shift = utils.ssd_centre_dict[data_set][coil]
+
+    print 'SHIFT', shift
         
     if undo == False:
         mult = -1.0
