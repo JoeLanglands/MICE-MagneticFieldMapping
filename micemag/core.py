@@ -109,7 +109,6 @@ def buildG4BLfield(magDict, gridDict, saveAs=None, FBonly=False, coil=True):
     print 'Writing out %d field points'%(xNsteps*yNsteps*zNsteps)
     count = 1
 
-    BZAXIS, BRAXIS, Z = [], [], []
     
     start_time = time.time()
     with open(os.path.join(utils.maus_field_path, saveAs), 'w') as _output:
@@ -129,26 +128,10 @@ def buildG4BLfield(magDict, gridDict, saveAs=None, FBonly=False, coil=True):
                                     _x, _y,_z, Bx, By, Bz))
                     utils.progressBar(count, xNsteps*yNsteps*zNsteps, start_time, time.time())
                     count += 1
-                    if _x == 0 and _y == 0:
-                        BZAXIS.append(Bz)
-                        Z.append(_z)
                         
     print 'Finished! File can be found at %s'%os.path.join(utils.maus_field_path, saveAs)
 
     
-    #_field = readFile(os.path.join(utils.SSU_data_path, 'run09_polarCoordinates.dat'))
-    _field = fm.flip_SSD_data(readFile(os.path.join(utils.SSD_data_path, 'run12_polarCoordinates.dat')))
-    _z, _bz = [], []
-    for _f in _field:
-        if _f.sensorNumber == 0:
-           _z.append(_f.z)
-           _bz.append(_f.Bz)
-    
-    plt.plot(Z, BZAXIS, 'm-')
-    plt.plot(_z, _bz, 'r.')
-    plt.xlabel(r'$z$ [mm]')
-    plt.ylabel(r'$B_{z}$ [T]')
-    plt.show()
     
 def perform_coil_fit(magnet, coil, FBfit=False, makeresid=True, save_as=None, verbose=True):
     if magnet.upper() not in ['SSU', 'SSD']:
