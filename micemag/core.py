@@ -109,7 +109,6 @@ def buildG4BLfield(magDict, gridDict, saveAs=None, FBonly=False, coil=True):
     print 'Writing out %d field points'%(xNsteps*yNsteps*zNsteps)
     count = 1
 
-    
     start_time = time.time()
     with open(os.path.join(utils.maus_field_path, saveAs), 'w') as _output:
         _output.write('\t%d\t%d\t%d\t1\n'%(xNsteps, yNsteps, zNsteps))
@@ -128,9 +127,11 @@ def buildG4BLfield(magDict, gridDict, saveAs=None, FBonly=False, coil=True):
                                     _x, _y,_z, Bx, By, Bz))
                     utils.progressBar(count, xNsteps*yNsteps*zNsteps, start_time, time.time())
                     count += 1
+                    if _x == 0 and _y == 0:
+                        Z.append(_z)
+                        BZAXIS.append(Bz)
                         
     print 'Finished! File can be found at %s'%os.path.join(utils.maus_field_path, saveAs)
-
     
     
 def perform_coil_fit(magnet, coil, FBfit=False, makeresid=True, save_as=None, verbose=True):
@@ -322,7 +323,7 @@ def make_resid_field(magnet, coil, coilfit=True, fitDict=None, saveAs=None, _cur
         dataField = readFile(dataFieldStr)
 
         if magnet == 'SSD':
-            dataField = fm.flip_SSD_field(datafield)
+            dataField = fm.flip_SSD_data(dataField)
         
         residualField = []
         
