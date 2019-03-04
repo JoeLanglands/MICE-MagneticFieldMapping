@@ -127,9 +127,6 @@ def buildG4BLfield(magDict, gridDict, saveAs=None, FBonly=False, coil=True):
                                     _x, _y,_z, Bx, By, Bz))
                     utils.progressBar(count, xNsteps*yNsteps*zNsteps, start_time, time.time())
                     count += 1
-                    if _x == 0 and _y == 0:
-                        Z.append(_z)
-                        BZAXIS.append(Bz)
                         
     print 'Finished! File can be found at %s'%os.path.join(utils.maus_field_path, saveAs)
     
