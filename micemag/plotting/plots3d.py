@@ -7,7 +7,6 @@ import scipy.interpolate as sp
 
 from micemag.fieldmanip import polarMeasurement as rphiz
 
-np.set_printoptions(threshold=np.nan)
 
 def wireFrame(field, field2=None, comp='Bz', unit='T', _R=(0.15, 0.15), zlim=None, labels=('field1', 'field2'), **kwargs):
     """

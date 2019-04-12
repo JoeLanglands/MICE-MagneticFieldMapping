@@ -1,4 +1,4 @@
-import os
+1import os
 import pickle
 import sys
 import time
@@ -93,7 +93,8 @@ def buildG4BLfield(magDict, gridDict, saveAs=None, FBonly=False, coil=True):
     print 'This could take a while...'
     if saveAs == None:
         _date = time.localtime()
-        saveAs = '%s_%s%s%s.table'%(magDict['magnet'], _date.tm_year, _date.tm_mon, _date.tm_mday)
+        saveAs = '%s_%s%02d%02d.table'%(magDict['magnet'], _date.tm_year, \
+                                    _date.tm_mon, _date.tm_mday)
 
     xNsteps = int((gridDict['x']['end'] + gridDict['x']['step'])/gridDict['x']['step'])
     xARR = np.linspace(gridDict['x']['start'], gridDict['x']['end'], xNsteps)
